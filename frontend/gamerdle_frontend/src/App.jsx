@@ -1,22 +1,13 @@
-import { useEffect, useState } from "react";
-import { getBackendMessage } from "./services/api";
+import { useState } from "react";
+import Board from "./components/Board";
 
 function App() {
-  const [message, setMessage] = useState("Loading...");
-
-  useEffect(() => {
-    getBackendMessage()
-      .then((data) => setMessage(data))
-      .catch((error) => {
-        console.error("Error fetching backend message:", error);
-        setMessage("Error connecting to backend");
-      });
-  }, []);
+  const [guesses, setGuesses] = useState(["STARE", "CLOUD"]);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Gamerdle</h1>
-      <p>{message}</p>
+    <div className="app">
+      <h1>GAMERDLE</h1>
+      <Board guesses={guesses}/>
     </div>
   );
 }
