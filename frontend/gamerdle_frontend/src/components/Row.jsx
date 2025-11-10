@@ -1,6 +1,7 @@
 import Tile from "./Tile";
 
 function Row({ guess = ""}) {
+    const word = typeof guess === "string" ? guess : "";
     const letters = guess.padEnd(5).split("");
 
     return (
