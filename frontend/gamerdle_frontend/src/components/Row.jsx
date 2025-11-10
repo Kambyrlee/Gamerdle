@@ -1,16 +1,20 @@
 import Tile from "./Tile";
 
-function Row({ guess = ""}) {
-    const word = typeof guess === "string" ? guess : "";
-    const letters = guess.padEnd(5).split("");
+function Row({ guess = "", result = [] }) {
+  const word = typeof guess === "string" ? guess : "";
+  const letters = guess.padEnd(5).split("");
 
-    return (
-        <div className="row">
-            {letters.map((char, i) => (
-                <Tile key={i} letter={char.toUpperCase()}/>
-            ))}
-        </div>
-    );
+  return (
+    <div className="row">
+      {letters.map((char, i) => (
+        <Tile
+          key={i}
+          letter={char.toUpperCase()}
+          status={result[i] || ""}
+        />
+      ))}
+    </div>
+  );
 }
 
 export default Row;
