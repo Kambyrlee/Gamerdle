@@ -2,9 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import Board from "./components/Board";
 import Keyboard from "./components/Keyboard";
 
-// Add hardcoded correct word for debugging.
-const correctWord = "GAMER";
-
 function getLetterStatuses(guesses) {
   const statuses = {};
   for (const { word, result } of guesses) {
@@ -26,11 +23,32 @@ function getLetterStatuses(guesses) {
 function App() {
   const [guesses, setGuesses] = useState([]);
   const [currGuess, setCurrGuess] = useState("");
+  const [currentWord, setCurrentWord] = useState("");
+  const [currentWordData, setCurrentWordData] = useState({});
   const currGuessRef = useRef(currGuess);
+  const correctWordRef = useRef("");
 
   useEffect(() => {
     currGuessRef.current = currGuess;
   }, [currGuess]);
+
+  useEffect(() => {
+    correctWordRef.current = currentWord.toUpperCase();
+  }, [currentWord])
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/words/random")
+      .then((res) => res.json())
+      .then((entry) => {
+        setCurrentWord(entry.word.toUpperCase());
+        setCurrentWordData(entry);
+      })
+      .catch((err) => console.error("Error fetching word", err));
+  }, []);
+
+  const correctWord = currentWord;
+  const wordInfo = currentWordData.definition;
+  console.log(correctWord);
 
   useEffect(() => {
     function handleKeyDown(e) {
@@ -45,7 +63,10 @@ function App() {
         const guess = currGuessRef.current.toUpperCase();
         if (guess.length !== 5) return;
 
-        const target = correctWord.split("");
+        const targetWord = correctWordRef.current;
+        if (!targetWord) return;
+
+        const target = targetWord.split("");
         const guessArr = guess.split("");
         const result = Array(5).fill("absent");
         const used = Array(5).fill(false);
@@ -85,11 +106,13 @@ function App() {
     <div className="app">
       <h1>🎮 GAMERDLE 🎮</h1>
       <Board guesses={guesses} currGuess={currGuess} />
-      <Keyboard letterStatuses={letterStatuses}
-      onKeyPress={(key) => {
-        const event = new KeyboardEvent("keydown", { key });
-        window.dispatchEvent(event);
-      }} />
+      <Keyboard
+        letterStatuses={letterStatuses}
+        onKeyPress={(key) => {
+          const event = new KeyboardEvent("keydown", { key });
+          window.dispatchEvent(event);
+        }}
+      />
     </div>
   );
 }
