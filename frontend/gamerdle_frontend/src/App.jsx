@@ -1,12 +1,32 @@
 import { useEffect, useRef, useState } from "react";
 import Board from "./components/Board";
+import Keyboard from "./components/Keyboard";
+
+// Add hardcoded correct word for debugging.
+const correctWord = "GAMER";
+
+function getLetterStatuses(guesses) {
+  const statuses = {};
+  for (const { word, result } of guesses) {
+    word.split("").forEach((letter, i) => {
+      const status = result[i];
+      const current = statuses[letter];
+      if (
+        current === "correct" ||
+        (current === "present" && status === "absent") ||
+        current === status
+      )
+        return;
+      statuses[letter] = status;
+    });
+  }
+  return statuses;
+}
 
 function App() {
   const [guesses, setGuesses] = useState([]);
   const [currGuess, setCurrGuess] = useState("");
   const currGuessRef = useRef(currGuess);
-  // Add hardcoded correct word for debugging.
-  const correctWord = "GAMER";
 
   useEffect(() => {
     currGuessRef.current = currGuess;
@@ -59,10 +79,17 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  const letterStatuses = getLetterStatuses(guesses);
+
   return (
     <div className="app">
       <h1>🎮 GAMERDLE 🎮</h1>
       <Board guesses={guesses} currGuess={currGuess} />
+      <Keyboard letterStatuses={letterStatuses}
+      onKeyPress={(key) => {
+        const event = new KeyboardEvent("keydown", { key });
+        window.dispatchEvent(event);
+      }} />
     </div>
   );
 }

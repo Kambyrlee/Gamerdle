@@ -1,8 +1,91 @@
-html, body {
+:root {
+  --color-correct: greenyellow;
+  --color-correct-border: green;
+  --color-present: gold;
+  --color-present-border: goldenrod;
+  --color-absent: gray;
+  --color-absent-border: darkslategray;
+  --color-default: whitesmoke;
+  --color-default-border: black;
+}
+
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
   background-color: slateblue;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin-top: 1rem;
+  gap: .25rem;
+}
+
+.key-row {
+  display: flex;
+  gap: .25rem;
+}
+
+.key {
+  width: 40px;
+  height: 58px;
+  background-color: var(--color-default);
+  font-size: 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.key:hover {
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  transform: scale(1.03);
+}
+
+.key.correct {
+  background-color: var(--color-correct);
+  border: 1px solid var(--color-correct-border);
+}
+
+.key.present {
+  background-color: var(--color-present);
+  border: 1px solid var(--color-present-border)
+}
+
+.key.absent {
+  background-color: var(--color-absent);
+  border: 1px solid var(--color-absent-border);
+}
+
+.key.correct:hover {
+  box-shadow: 0 0 10px var(--color-correct);
+}
+
+.key.present:hover {
+  box-shadow: 0 0 10px var(--color-present);
+}
+
+.key.absent:hover {
+  box-shadow: 0 0 10px var(--color-absent);
+}
+
+.key:hover:not(.correct):not(.present):not(.absent) {
+  box-shadow: 0 0 10px #9ea0a3;
+}
+
+.key.wide {
+  width: 64px;
+  justify-content: space-evenly;
+}
+
+.enter-label {
+  font-size: 2rem;
 }
 
 .app {
@@ -30,11 +113,11 @@ html, body {
 .tile {
   width: 60px;
   height: 60px;
-  border: 2px solid black;
+  border: 2px solid var(--color-default-border);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  background-color: var(--color-default);
   color: black;
   font-weight: bold;
   border-radius: 8px;
@@ -42,16 +125,16 @@ html, body {
 }
 
 .tile.correct {
-  background-color: greenyellow;
-  border-color: green;
+  background-color: var(--color-correct);
+  border-color: var(--color-correct-border);
 }
 
 .tile.present {
-  background-color: gold;
-  border-color: goldenrod;
+  background-color: var(--color-present);
+  border-color: var(--color-present-border);
 }
 
 .tile.absent {
-  background-color: gray;
-  border-color: darkslategray
+  background-color: var(--color-absent);
+  border-color: var(--color-absent-border);
 }
